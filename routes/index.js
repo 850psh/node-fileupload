@@ -54,7 +54,7 @@ function checkType(image){
 
 function renameImg(image){
     var tmp_path = image.path;
-    var target_path = './public/images/' + image.name;
+    var target_path = './public/upload/' + image.name;
     console.log('->> tmp_path: ' + tmp_path );
     console.log('->> target_path: ' + target_path );
             

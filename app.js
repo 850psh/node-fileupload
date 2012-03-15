@@ -14,7 +14,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.set('view options', { layout: false });
   app.use(express.limit('5mb'));
-  app.use(express.bodyParser({uploadDir: __dirname + '/upload'}));  
+  app.use(express.bodyParser({uploadDir: __dirname + '/tmp'}));  
   app.use(express.methodOverride());
   app.use(express.logger({ buffer: 5000}));
   app.use(express.favicon());
