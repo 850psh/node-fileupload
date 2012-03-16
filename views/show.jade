@@ -5,6 +5,6 @@ block content
     ul
         - images.forEach(function(image){
             li
-                img(src='/images/'+image.name)
-                p= image.size
+                p Upload image name is  #{image.name} and Size is #{image.size}kb
+                img(src='/upload/'+image.name)
         - })

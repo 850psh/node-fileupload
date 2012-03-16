@@ -9,48 +9,41 @@ exports.test = function(req, res){
     res.render('test', { title: 'Upload Test'});
 };
 
-exports.upload = function(req, res){    
-    console.log('-> upload was called\n\n');
-    console.log('-> ' +  util.inspect(req.files));        
-    var images = [];
-    var isImage = false;
+exports.upload = function(req, res){
+    if(req.is('an image')){
+        console.log('-> upload was called\n\n');
+        console.log('-> ' +  util.inspect(req.files));        
+        var images = [];
     
-    if (Array.isArray(req.files.imgs)){
-        req.files.imgs.forEach(function(image){
-            var kb = image.size / 1024 | 0;
-            isImage = checkType(image);
-            images.push({name: image.name, size: kb, isImage: isImage});
-            renameImg(image);
-            console.log('->> isImage: ' + isImage );
-        });  
-    }else{
-        var image = req.files.imgs;
-        var kb = image.size / 1024 | 0;
-        isImage = checkType(image);
-        images.push({name: image.name, size: kb, isImage: isImage});
-        renameImg(image);
-        console.log('->> isImage: ' + isImage );
-    }
+        req.addListener('data', function(chunk) {
+            console.log('-> data ' + chunk);
+        });
     
-    console.log('->> render');
-    res.render('show', { title: 'Show'
-                            ,images: images
-    });
-};
+        if (Array.isArray(req.files.imgs)){
+            req.files.imgs.forEach(function(image){
+                var kb = image.size / 1024 | 0;
 
-function checkType(image){
-    var isImage = false;
-    console.log('->> image.type.indexOf : ' + image.type.indexOf('image'));
+                images.push({name: image.name, size: kb});
+                renameImg(image);
+            });  
+        }else{
+            var image = req.files.imgs;
+            var kb = image.size / 1024 | 0;
+
+            images.push({name: image.name, size: kb});
+            renameImg(image);
+        }
     
-    if(image.type.indexOf('image') > -1){
-        console.log('->>> req.files.img is img');
-        isImage = true;
+        console.log('->> render');
+        res.render('show', { title: 'Show'
+                            ,images: images
+        });
     }else{
-        console.log('->>> req.files.img is not img');
-        isImage = false;
+        res.render('error', { title: 'Error'
+                            ,msg: 'plz Upload only Image types'
+        });
     }
-    return isImage;
-}
+};
 
 function renameImg(image){
     var tmp_path = image.path;

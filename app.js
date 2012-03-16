@@ -30,6 +30,23 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+app.is('an image', function(req){
+    console.log('->> ' + req.headers['content-type']);
+    if(req.headers['content-type'].indexOf('multipart') === 0){
+        if (Array.isArray(req.files.imgs)){
+            req.files.imgs.forEach(function(image){
+                if(image.type.indexOf('image')  !== 0) return false;
+            });
+        }else{
+            console.log('->> ' + req.files.imgs.type);
+            if(req.files.imgs.type.indexOf('image') !== 0) return false;            
+        }
+    }else{
+        if(req.headers['content-type'].indexOf('image') !== 0) return false;
+    }
+    return true;
+});
+
 // Routes
 
 app.get('/', routes.index);
