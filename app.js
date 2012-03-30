@@ -17,7 +17,7 @@ app.configure(function(){
   app.use(express.bodyParser({uploadDir: __dirname + '/tmp'}));  
   app.use(express.methodOverride());
   app.use(express.logger({ buffer: 5000}));
-  app.use(express.favicon());
+  //app.use(express.favicon());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
